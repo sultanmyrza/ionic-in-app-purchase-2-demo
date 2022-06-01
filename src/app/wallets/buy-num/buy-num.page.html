@@ -1,12 +1,41 @@
 <ion-header translucent="">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/"></ion-back-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>Buy NUMs</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-list>
+    <ion-list-header *ngIf="fetchingProductsWithNumpoints">
+      Fetching products...
+    </ion-list-header>
 
+    <ion-list-header>Total NUMs: {{myNumPoints}}</ion-list-header>
+
+    <ion-item *ngFor="let product of inAppProductsWithNumPoints$|async">
+      <ion-label>
+        <h3>{{product.inAppProduct.title}}</h3>
+        <h2>{{product.inAppProduct.price}}</h2>
+      </ion-label>
+      <ion-button (click)="purchase(product)" size="small" color="success">
+        Buy {{product.numPoints}} points
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>Purchase activity</ion-list-header>
+    <ion-item *ngFor="let activity of purchaseActivity">
+      <ion-label>
+        <h3>{{activity.inAppProduct.title}}</h3>
+        <h2>{{activity.inAppProduct.price}}</h2>
+      </ion-label>
+      <ion-button disabled size="small" color="success">
+        Added +{{activity.numPoints}} points
+      </ion-button>
+    </ion-item>
+  </ion-list>
 </ion-content>
