@@ -1,0 +1,7 @@
+{
+  "name": "in-app-purchase-2-demo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
