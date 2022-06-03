@@ -57,7 +57,7 @@ export class BuyNumPage {
     await this.platform.ready();
     // this.registerStoreListeners()
     this.store.verbosity = this.store.DEBUG;
-    this.store.ready(this.onStoreReady.bind(this));
+    this.store.ready(this.onStoreReady);
     this.fetchInAppProducts();
     this.fetchNumPointsPriceList();
   }
@@ -65,20 +65,20 @@ export class BuyNumPage {
   registerStoreListeners() {
     this.store
       .when('product')
-      .cancelled(this.onStoreProductCanceled.bind(this))
-      .approved(this.onStoreProductApproved.bind(this))
-      .verified(this.onStoreProductVerified.bind(this))
-      .finished(this.onStoreProductFinished.bind(this))
-      .error(this.onStoreProductError.bind(this));
+      .cancelled(this.onStoreProductCanceled)
+      .approved(this.onStoreProductApproved)
+      .verified(this.onStoreProductVerified)
+      .finished(this.onStoreProductFinished)
+      .error(this.onStoreProductError);
   }
 
   unregisterStoreListeners() {
-    this.store.off(this.onStoreReady.bind(this));
-    this.store.off(this.onStoreProductCanceled.bind(this));
-    this.store.off(this.onStoreProductApproved.bind(this));
-    this.store.off(this.onStoreProductVerified.bind(this));
-    this.store.off(this.onStoreProductFinished.bind(this));
-    this.store.off(this.onStoreProductError.bind(this));
+    this.store.off(this.onStoreReady);
+    this.store.off(this.onStoreProductCanceled);
+    this.store.off(this.onStoreProductApproved);
+    this.store.off(this.onStoreProductVerified);
+    this.store.off(this.onStoreProductFinished);
+    this.store.off(this.onStoreProductError);
   }
 
   registerProducts() {
@@ -105,20 +105,20 @@ export class BuyNumPage {
     }
   }
 
-  onStoreProductCanceled(product: IAPProduct) {
+  onStoreProductCanceled = (product: IAPProduct) => {
     this.debug('onStoreProductCanceled', product);
-  }
+  };
 
-  onStoreProductApproved(product: IAPProduct) {
+  onStoreProductApproved = (product: IAPProduct) => {
     if (product.id === 'io.ionic.starter') {
       return;
     }
 
     this.debug(`onStoreProductApproved`, product);
     return product.verify();
-  }
+  };
 
-  onStoreProductVerified(inAppProduct: IAPProduct) {
+  onStoreProductVerified = (inAppProduct: IAPProduct) => {
     if (inAppProduct.id === 'io.ionic.starter') {
       return;
     }
@@ -140,25 +140,25 @@ export class BuyNumPage {
 
     this.debug(`onStoreProductVerified`, inAppProduct);
     inAppProduct.finish();
-  }
+  };
 
-  onStoreProductFinished(product: IAPProduct) {
+  onStoreProductFinished = (product: IAPProduct) => {
     if (product.id === 'io.ionic.starter') {
       return;
     }
 
     this.debug('onStoreProductFinished', product);
-  }
+  };
 
-  onStoreProductError(error: IAPError) {
+  onStoreProductError = (error: IAPError) => {
     this.debug('onStoreProductError', error);
-  }
+  };
 
-  onStoreReady() {
+  onStoreReady = () => {
     this.debug(`onStoreReady`, this.store.products);
     this.registerProducts();
     return this.inAppProducts$.next(this.store.products);
-  }
+  };
 
   fetchInAppProducts() {
     this.debug(`fetchInAppProducts`);
