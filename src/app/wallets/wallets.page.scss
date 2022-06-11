@@ -2,10 +2,18 @@ ion-menu-button {
   color: var(--ion-color-primary);
 }
 
+ion-card {
+  max-width: 350px;
+}
+
 ion-card-content {
   display: flex;
   justify-content: space-around;
   align-items: center;
+}
+
+.v-space-8 {
+  height: 8px;
 }
 
 ion-button {

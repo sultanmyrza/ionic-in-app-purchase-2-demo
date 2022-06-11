@@ -14,15 +14,35 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-card> 
+  <ion-card>
     <ion-card-header>
-      <ion-card-subtitle>Balance: 0.00 NUM</ion-card-subtitle>
+      <ion-card-title>Complex version</ion-card-title>
+      <div class="v-space-8"></div>
+      <ion-card-subtitle>
+        This sample have 4 consumable in app purchase products. Closer to app
+        that we want to implement.
+      </ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
-      <ion-button routerLink="buy-num" size="small" color="success">Buy NUM</ion-button>
-      <ion-button size="small" color="secondary">Deposit</ion-button>
-      <ion-button size="small" color="tertiary">Withdraw</ion-button>
+      <ion-button routerLink="buy-num" size="small" color="success">
+        Buy NUM
+      </ion-button>
     </ion-card-content>
   </ion-card>
-  
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Simple version</ion-card-title>
+      <div class="v-space-8"></div>
+      <ion-card-subtitle>
+        This sample have 1 consumable in app purchase products. Ideal for
+        testing and make in-app purchase work.
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button routerLink="buy-num-simple" size="small" color="success">
+        Buy NUM
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

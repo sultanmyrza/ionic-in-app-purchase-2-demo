@@ -1,0 +1,21 @@
+<ion-header translucent="">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Buy NUMs (Simple)</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list-header>Total NUMs: </ion-list-header>
+  <ion-item>
+    <ion-label>
+      <h3>title</h3>
+      <h2>price</h2>
+    </ion-label>
+    <ion-button (click)="purchase()" size="small" color="success">
+      Buy x points
+    </ion-button>
+  </ion-item>
+</ion-content>
