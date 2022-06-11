@@ -9,12 +9,13 @@ import { StoreService } from 'src/app/shared/store/store.service';
   styleUrls: ['./buy-num.page.scss'],
 })
 export class BuyNumPage {
-  readonly inAppProducts$ = this.store.inAppProducts$.pipe(
+  readonly inAppProducts$ = this.store.inAppProductsWithNumpoints$.pipe(
     tap((_) => this.ref.detectChanges())
   );
 
-  readonly totalProducts = this.store.inAppProducts$.pipe(
-    map((products) => products.length)
+  readonly totalProducts = this.store.inAppProductsWithNumpoints$.pipe(
+    map((products) => products.length),
+    tap((_) => this.ref.detectChanges())
   );
 
   readonly numPoints$ = this.store.numPoints$;

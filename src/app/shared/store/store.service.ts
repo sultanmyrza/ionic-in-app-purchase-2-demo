@@ -6,6 +6,7 @@ import {
 } from '@awesome-cordova-plugins/in-app-purchase-2/ngx';
 import { Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { getNumPoints, setNumPoints, setupDebugPrint } from 'src/app/app.utils';
 
 @Injectable({
@@ -14,8 +15,21 @@ import { getNumPoints, setNumPoints, setupDebugPrint } from 'src/app/app.utils';
 export class StoreService implements OnDestroy {
   readonly debugPrint = setupDebugPrint('StoreService');
 
-  readonly inAppProducts$ = new BehaviorSubject<IAPProduct[]>([]);
   readonly numPoints$ = new BehaviorSubject<number>(0);
+
+  readonly inAppProducts$ = new BehaviorSubject<IAPProduct[]>([]);
+
+  readonly inAppProductsWithNumpoints$ = this.inAppProducts$.pipe(
+    map((products) => {
+      const result = products.map((product) => ({
+        numPoints: this.pointsForProduct(product),
+        inAppProduct: product,
+      }));
+      return result;
+    })
+  );
+
+  private numPriceListById: { [id: string]: NumPointPrice };
 
   // inAppProductsWithNumPoints$ = combineLatest([
   //   this.inAppProducts$,
@@ -49,17 +63,23 @@ export class StoreService implements OnDestroy {
       return;
     }
 
-    this.platform.ready().then(async () => {
+    try {
       this.debugPrint('init');
       this.notifyUser('Initializing store');
-
-      // TODO: get app id async
+      // TODO: get AppID
       this.numPoints$.next(await getNumPoints());
+
+      await this.refreshNumPointsPricing();
+
+      await this.platform.ready();
 
       this.regiseterListeners();
       this.registerProducts();
+
       this.store.refresh();
-    });
+    } catch (error) {
+      this.notifyUser('Failed to init store');
+    }
   }
 
   ngOnDestroy(): void {
@@ -188,54 +208,52 @@ export class StoreService implements OnDestroy {
   }
 
   private pointsForProduct(product: IAPProduct) {
-    // TODO: make it dynamic fetch points for product from server
-    switch (product.id) {
-      case CaptureInAppProductIds.BRONZE_PACK:
-        return 10;
-      case CaptureInAppProductIds.SLIVER_PACK:
-        return 30;
-      case CaptureInAppProductIds.GOLD_PACK:
-        return 60;
-      case CaptureInAppProductIds.PLATINUM_PACK:
-        return 90;
-      default:
-        return 0;
-    }
+    return this.numPriceListById[product.id]?.quantity ?? 0;
   }
 
   private async notifyUser(message: string) {
     const toast = await this.toastController.create({
       message,
-      duration: 2000,
+      duration: 1000,
     });
     toast.present();
   }
 
-  private async fetchNumPointsPriceList() {
+  private async refreshNumPointsPricing() {
     this.debugPrint('fetchNumPointsPriceList');
+    // TODO: fetch from server
     await new Promise((res) => setTimeout(res, 2000));
     const priceListFromRestApi = [
       {
         id: 1,
         quantity: 30,
         inAppPurchaseId: 'cap_lite_consumable_bronze_pack_099',
+        updatedAt: new Date(),
       },
       {
         id: 2,
         quantity: 60,
         inAppPurchaseId: 'cap_lite_consumable_silver_pack_199',
+        updatedAt: new Date(),
       },
       {
         id: 3,
         quantity: 90,
         inAppPurchaseId: 'cap_lite_consumable_gold_pack_299',
+        updatedAt: new Date(),
       },
       {
         id: 4,
         quantity: 120,
         inAppPurchaseId: 'cap_lite_consumable_platinum_pack_399',
+        updatedAt: new Date(),
       },
     ];
+    const priceListById: { [id: string]: NumPointPrice } = {};
+    priceListFromRestApi.forEach((item) => {
+      priceListById[item.inAppPurchaseId] = item;
+    });
+    this.numPriceListById = priceListById;
   }
 }
 
@@ -254,6 +272,7 @@ interface NumPointPrice {
   id: number;
   quantity: number;
   inAppPurchaseId: string;
+  updatedAt: Date;
 }
 
 interface InAppProductsWithNumPoints {

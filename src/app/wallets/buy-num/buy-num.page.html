@@ -14,16 +14,16 @@
     </ion-list-header>
     <ion-item *ngFor="let product of inAppProducts$|async">
       <ion-label>
-        <h3>{{product.title}}</h3>
-        <h2>{{product.price}}</h2>
+        <h3>{{product.inAppProduct.title}}</h3>
+        <h2>{{product.inAppProduct.price}}</h2>
       </ion-label>
       <ion-button
-        (click)="purchase(product)"
-        [disabled]="!product.canPurchase"
+        (click)="purchase(product.inAppProduct)"
+        [disabled]="!product.inAppProduct.canPurchase"
         color="success"
       >
-        Buy x points ({{product.state}})
-        <ion-spinner *ngIf="product.state!=='valid'"></ion-spinner>
+        Buy {{product.numPoints}} points ({{product.inAppProduct.state}})
+        <ion-spinner *ngIf="product.inAppProduct.state!=='valid'"></ion-spinner>
       </ion-button>
     </ion-item>
   </ion-list>
