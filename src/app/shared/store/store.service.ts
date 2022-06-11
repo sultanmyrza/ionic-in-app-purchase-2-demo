@@ -72,17 +72,16 @@ export class StoreService implements OnDestroy {
   }
 
   private async finishPurchase(product: IAPProduct) {
-    const currPoints = await getNumPoints();
     const pointsToAdd = this.pointsForProduct(product);
-    const points = currPoints + pointsToAdd;
+    await this.addPoints(pointsToAdd);
+    product.finish();
+  }
 
+  private async addPoints(pointsToAdd: number) {
+    const currPoints = await getNumPoints();
+    const points = currPoints + pointsToAdd;
     await setNumPoints(points);
     this.numPoints$.next(points);
-
-    // TODO: find out should it be called before or after giving points?
-    // Accourding to example finish is called after. https://gist.github.com/j3k0/3324bb8e759fef4b3054b834a5a88500
-    product.finish();
-
     await this.notifyUser(`Added ${pointsToAdd} points 🎉`);
   }
 
