@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { IAPProduct } from '@awesome-cordova-plugins/in-app-purchase-2/ngx';
-import { BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { StoreService } from 'src/app/shared/store/store.service';
 
 @Component({
@@ -11,15 +10,14 @@ import { StoreService } from 'src/app/shared/store/store.service';
 })
 export class BuyNumPage {
   readonly inAppProducts$ = this.store.inAppProducts$.pipe(
-    tap((_) => {
-      this.ref.detectChanges();
-    })
+    tap((_) => this.ref.detectChanges())
   );
-  readonly numPoints$ = this.store.numPoints$;
 
-  // Deprecated field
-  purchaseActivity: InAppProductsWithNumPoints[] = [];
-  numPointsPrices$ = new BehaviorSubject<NumPointPrice[]>([]);
+  readonly totalProducts = this.store.inAppProducts$.pipe(
+    map((products) => products.length)
+  );
+
+  readonly numPoints$ = this.store.numPoints$;
 
   constructor(
     private readonly store: StoreService,
@@ -28,6 +26,10 @@ export class BuyNumPage {
 
   purchase(product: IAPProduct) {
     this.store.purchase(product);
+  }
+
+  async resetNumPoints() {
+    this.store.debugOnlyResetNumPoints();
   }
 }
 

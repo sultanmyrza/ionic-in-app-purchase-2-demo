@@ -71,6 +71,13 @@ export class StoreService implements OnDestroy {
     this.store.order(product);
   }
 
+  async debugOnlyResetNumPoints() {
+    // For debuggin purposes only
+    await setNumPoints(0);
+    this.numPoints$.next(0);
+    await this.notifyUser(`Num points are reset 🚀`);
+  }
+
   private async finishPurchase(product: IAPProduct) {
     const pointsToAdd = this.pointsForProduct(product);
     await this.addPoints(pointsToAdd);
@@ -172,7 +179,7 @@ export class StoreService implements OnDestroy {
   };
 
   private isNativePlatform() {
-    return this.platform.is('ios') || this.platform.is('android');
+    return this.platform.is('hybrid');
   }
 
   private shouldIgnoreProduct(product: IAPProduct) {

@@ -3,14 +3,15 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Buy NUMs (Complex)</ion-title>
+    <ion-title>Buy NUMs</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
-    <ion-list-header>Total NUMs: {{numPoints$|async}}</ion-list-header>
-
+    <ion-list-header *ngIf="(totalProducts|async)===0">
+      In App Products are not available
+    </ion-list-header>
     <ion-item *ngFor="let product of inAppProducts$|async">
       <ion-label>
         <h3>{{product.title}}</h3>
@@ -26,17 +27,15 @@
       </ion-button>
     </ion-item>
   </ion-list>
-
-  <ion-list>
-    <ion-list-header>Purchase activity</ion-list-header>
-    <ion-item *ngFor="let activity of purchaseActivity">
-      <ion-label>
-        <h3>{{activity.inAppProduct.title}}</h3>
-        <h2>{{activity.inAppProduct.price}}</h2>
-      </ion-label>
-      <ion-button disabled size="medium" color="success">
-        Added +{{activity.numPoints}} points
-      </ion-button>
-    </ion-item>
-  </ion-list>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    Total NUMs: {{numPoints$|async}}
+    <ion-buttons slot="end">
+      <ion-button color="danger" (click)="resetNumPoints()">
+        Reset NUMs
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
