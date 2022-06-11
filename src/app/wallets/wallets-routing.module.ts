@@ -13,13 +13,6 @@ const routes: Routes = [
     loadChildren: () =>
       import('./buy-num/buy-num.module').then((m) => m.BuyNumPageModule),
   },
-  {
-    path: 'buy-num-simple',
-    loadChildren: () =>
-      import('./buy-num-simple/buy-num-simple.module').then(
-        (m) => m.BuyNumSimplePageModule
-      ),
-  },
 ];
 
 @NgModule({
