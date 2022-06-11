@@ -8,14 +8,29 @@
 </ion-header>
 
 <ion-content>
-  <ion-list-header>Total NUMs: </ion-list-header>
-  <ion-item>
+  <ion-list-header>Total NUMs: {{numPoints}} </ion-list-header>
+
+  <h3 *ngIf="!consumableProduct">Fetching products</h3>
+
+  <ion-item *ngIf="consumableProduct">
     <ion-label>
-      <h3>title</h3>
-      <h2>price</h2>
+      <ng-template *ngIf="consumableProduct.loaded === true">
+        <h3>{{consumableProduct.title}}</h3>
+        <h2>{{consumableProduct.price}}</h2>
+      </ng-template>
+
+      <ng-template *ngIf="consumableProduct.loaded === false">
+        <h3>Retrieving info...</h3>
+      </ng-template>
     </ion-label>
-    <ion-button (click)="purchase()" size="small" color="success">
-      Buy x points
+
+    <ion-button
+      [disabled]="consumableProduct.canPurchase===false"
+      (click)="purchaseConsumable()"
+      size="small"
+      color="success"
+    >
+      Buy 10 points
     </ion-button>
   </ion-item>
 </ion-content>
