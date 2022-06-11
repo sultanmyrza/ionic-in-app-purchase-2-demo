@@ -32,14 +32,3 @@ export class BuyNumPage {
     this.store.debugOnlyResetNumPoints();
   }
 }
-
-interface NumPointPrice {
-  id: number;
-  quantity: number;
-  inAppPurchaseId: string;
-}
-
-interface InAppProductsWithNumPoints {
-  inAppProduct: IAPProduct;
-  numPoints: number;
-}
