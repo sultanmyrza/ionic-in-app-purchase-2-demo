@@ -9,19 +9,20 @@
 
 <ion-content>
   <ion-list>
-    <ion-list-header *ngIf="fetchingProductsWithNumpoints">
-      Fetching products...
-    </ion-list-header>
+    <ion-list-header>Total NUMs: {{numPoints$|async}}</ion-list-header>
 
-    <ion-list-header>Total NUMs: {{myNumPoints}}</ion-list-header>
-
-    <ion-item *ngFor="let product of inAppProductsWithNumPoints$|async">
+    <ion-item *ngFor="let product of inAppProducts$|async">
       <ion-label>
-        <h3>{{product.inAppProduct.title}}</h3>
-        <h2>{{product.inAppProduct.price}}</h2>
+        <h3>{{product.title}}</h3>
+        <h2>{{product.price}}</h2>
       </ion-label>
-      <ion-button (click)="purchase(product)" size="small" color="success">
-        Buy {{product.numPoints}} points
+      <ion-button
+        (click)="purchase(product)"
+        [disabled]="!product.canPurchase"
+        color="success"
+      >
+        Buy x points ({{product.state}})
+        <ion-spinner *ngIf="product.state!=='valid'"></ion-spinner>
       </ion-button>
     </ion-item>
   </ion-list>
@@ -33,7 +34,7 @@
         <h3>{{activity.inAppProduct.title}}</h3>
         <h2>{{activity.inAppProduct.price}}</h2>
       </ion-label>
-      <ion-button disabled size="small" color="success">
+      <ion-button disabled size="medium" color="success">
         Added +{{activity.numPoints}} points
       </ion-button>
     </ion-item>

@@ -6,7 +6,7 @@ import {
 import { InAppPurchase2 } from '@awesome-cordova-plugins/in-app-purchase-2/ngx';
 import { Platform } from '@ionic/angular';
 import { getNumPoints, setNumPoints, setupDebugPrint } from 'src/app/app.utils';
-import { CaptureInAppProductIds } from '../buy-num/buy-num.page';
+import { CaptureInAppProductIds } from 'src/app/shared/store/store.service';
 
 @Component({
   selector: 'app-buy-num-simple',
